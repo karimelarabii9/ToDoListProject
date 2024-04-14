@@ -1,0 +1,53 @@
+<div class="container">
+    <div class="row justify-content-center mt-5">
+        <div class="col-md-8">
+            <div *ngIf="tasksService.tasks.length > 0">
+                <div class="card shadow bg-light rounded">
+                    <div class="card-header bg-dark text-white">
+                        <h4 class="mb-0">Tasks</h4>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li *ngFor="let task of tasksService.tasks; let index = index" class="list-group-item">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h5 class="small-text mb-1">Task Name: {{ task.Name }}</h5>
+                                    <p class="mb-0">Description: {{ task.description }}</p>
+                                    <p class="text-muted mb-0">Due Date: {{ task.due_date | date }}</p>
+                                    <p class="mb-0">Status: {{ task.status }}</p>
+                                </div>
+                                <div class="d-flex align-items-center">
+                                    <input type="checkbox" [checked]="task.completed" (change)="toggleTaskCompletionForCheckBox(index)" class="mr-3">
+                                    <span style="margin-right: 5px;"></span>
+
+                                    <div class="btn-group" role="group">
+                                        <button class="btn btn-danger btn-sm" (click)="deleteTask(index)">
+                                            <i class="fas fa-trash-alt"></i> Delete
+                                        </button>
+                                        <!-- Added spacing -->
+                                        <span style="margin-right: 5px;"></span>
+                                        <button class="btn btn-primary btn-sm ml-2" (click)="editTask(task)"> Edit</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div *ngIf="editingTask === task" class="mt-2">
+                                <input type="text" #editedTitle placeholder="Name" value="{{task.Name}}" class="form-control mb-1"><br>
+                                <input type="text" #editedDescription placeholder="Description" value="{{task.description}}" class="form-control mb-1"><br>
+                                <input type="date" #editedDueDate [value]="task.due_date | date:'yyyy-MM-dd'" class="form-control mb-1"><br>
+                                <div>
+                                    <button class="btn btn-success btn-sm mr-2" (click)="saveEditedTask(editedTitle.value, editedDescription.value, editedDueDate.value)"> Save</button>
+                                    <button class="btn btn-secondary btn-sm" (click)="cancelEdit()"> Cancel</button>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div *ngIf="tasksService.tasks.length === 0" class="alert alert-danger mt-3">
+                No Tasks Found
+            </div>
+            <button class="btn btn-success mt-3" routerLink="/add-task">
+                <i class="fas fa-plus-circle"></i> Add Task
+            </button>
+        </div>
+    </div>
+</div>
